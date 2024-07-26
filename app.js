@@ -6,12 +6,13 @@ const path = require("path");
 const ejsMate = require("ejs-mate");
 const wrapasync = require("./utils/wrapasync.js");
 const Expresserror = require("./utils/Expresserror.js");
-const { listingSchema } = require("./schema.js");
+const { listingJoiSchema } = require("./schema.js");
 const methodOverride = require("method-override");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // Add this line to handle JSON payloads
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
@@ -33,7 +34,7 @@ app.get("/", (req, res) => {
 });
 
 const validateListing = (req, res, next) => {
-    let { error } = listingSchema.validate(req.body);
+    let { error } = listingJoiSchema.validate(req.body);
     if (error) {
         let errMsg = error.details.map((el) => el.message).join(",");
         throw new Expresserror(400, errMsg);
@@ -58,7 +59,7 @@ app.get("/listings/:id", wrapasync(async (req, res) => {
 }));
 
 app.post("/listings", validateListing, wrapasync(async (req, res, next) => {
-    let result = listingSchema.validate(req.body);
+    let result = listingJoiSchema.validate(req.body);
     console.log(result);
     if (result.error) {
         throw new Expresserror(400, result.error);
