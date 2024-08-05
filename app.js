@@ -77,7 +77,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    // console.log(res.locals.success);
+    res.locals.currUser = req.user;
     next();
 })
 
@@ -110,7 +110,7 @@ app.use((err, req, res, next) => {
 });
 
 // Starting the Server
-const PORT = process.env.PORT || 8080;
+const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
 });
