@@ -33,9 +33,9 @@ const listingSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Review"
     }],
-    owner : {
-        type : Schema.Types.ObjectId,
-        ref : "User"
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
     },
 
 }, { timestamps: true });

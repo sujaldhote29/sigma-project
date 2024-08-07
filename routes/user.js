@@ -36,7 +36,7 @@ router.get("/login", (req, res) => {
 })
 
 router.post("/login", passport.authenticate("local", { failureRedirect: '/login', failureFlash: true }), async (req, res) => {
-    req.flash("success","Welcome to Wanderlust! You are logged in!")
+    req.flash("success", "Welcome to Wanderlust! You are logged in!")
     res.redirect("/listings");
 
 });
