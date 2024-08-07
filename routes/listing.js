@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const wrapasync = require("../utils/wrapasync.js");
 const Listing = require("../models/listing.js");
-const { isLoggedIn, isOwner ,validateListing} = require("../middleware.js");
+const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 
 
 
@@ -18,7 +18,7 @@ router.get("/new", isLoggedIn, (req, res) => {
 
 router.get("/:id", wrapasync(async (req, res) => {
     const { id } = req.params;
-    const listing = await Listing.findById(id).populate("reviews").populate("owner");
+    const listing = await Listing.findById(id).populate({ path: "reviews", populate: { path: "author" } }).populate("owner");
     if (!listing) {
         req.flash("error", "Listing you Requested for does not exist");
         res.redirect("/listings");
