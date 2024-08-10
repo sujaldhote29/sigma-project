@@ -17,3 +17,12 @@
     }, false)
   })
 })()
+
+
+
+document.querySelectorAll('.starability-slot input[type="radio"]').forEach((radio) => {
+  radio.addEventListener('change', function () {
+      const rating = this.value;
+      alert('You have rated ' + rating + ' stars.');
+  });
+});
