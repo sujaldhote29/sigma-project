@@ -62,9 +62,9 @@ const sessionOptions = {
 };
 
 // Route Handlers
-app.get("/", (req, res) => {
-    res.send("root is working");
-});
+// app.get("/", (req, res) => {
+//     res.send("root is working");
+// });
 
 
 app.use(session(sessionOptions));
