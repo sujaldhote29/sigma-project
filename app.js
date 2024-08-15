@@ -20,6 +20,7 @@ const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -39,9 +40,11 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 
 // MongoDB Connection
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
-mongoose.connect(MONGO_URL)
+const dburl = process.env.ATLASDB_URL;
+
+mongoose.connect(dburl)
     .then(() => {
         console.log("connected to db");
     })
@@ -49,9 +52,21 @@ mongoose.connect(MONGO_URL)
         console.log("Error connecting to DB:", err);
     });
 
+const store = MongoStore.create({
+    mongoUrl: dburl,
+    crypto: {
+        secret: process.env.SECRET,
+    },
+    touchAfter: 24 * 3600
+});
 
+store.on("error", () => {
+    console.log("Error in mongo session store", err);
+
+})
 const sessionOptions = {
-    secret: "mysupersecretstring",
+    store,
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
